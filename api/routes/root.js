@@ -3,7 +3,7 @@ const router = express.Router();
 
 // GET
 router.get("/", async (req, res) => {
-    res.redirect("https://github.com/snehasishcodes/vscode-status/blob/main/extension/README.md")
+    res.redirect("https://marketplace.visualstudio.com/items?itemName=snehasishcodes.vscode-status");
 });
 
 module.exports = router;
