@@ -22,6 +22,7 @@ async function activate(context: vscode.ExtensionContext) {
 	const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 	statusBarItem.tooltip = "VSCode Status. Click to open your API URL.";
 	statusBarItem.text = "$(plug) Initialising";
+	statusBarItem.command = "vscode-status.openURL";
 	statusBarItem.show();
 
 	// get workspace configurations
@@ -30,7 +31,6 @@ async function activate(context: vscode.ExtensionContext) {
 	let uid: string | undefined = config.get("uid");
 	if (!uid) {
 		statusBarItem.text = `$(plug) Creating UID`;
-		statusBarItem.command = "vscode-status.openURL";
 		uid = createUid();
 		await config.update("uid", uid, vscode.ConfigurationTarget.Global);
 		log(LogLevel.Info, "[INFO]: Generated a new UID and stored.");
@@ -38,20 +38,27 @@ async function activate(context: vscode.ExtensionContext) {
 
 	// start updating the status
 	await send(uid);
+	vscode.window.showInformationMessage("VSCode Status: Active", "Open API Endpoint").then((selectedButton) => {
+		if (selectedButton === "Open API Endpoint") {
+			vscode.env.openExternal(vscode.Uri.parse(`https://vscode.snehasish.xyz/api/users/${uid}`));
+		}
+	});
 	statusBarItem.text = `$(plug) Active`;
 
 	const activeTextEditorChangeListener = vscode.window.onDidChangeActiveTextEditor(() => send(uid));
-	const textDocumentChangeListener = vscode.workspace.onDidChangeTextDocument(throttle(() => send(uid), 5000));
+	const textDocumentChangeListener = vscode.workspace.onDidChangeTextDocument(throttle(() => send(uid), 3000));
+	const textDocumentCloseListener = vscode.workspace.onDidCloseTextDocument(() => send(uid));
 	const workspaceFolderChangeListener = vscode.workspace.onDidChangeWorkspaceFolders(() => send(uid));
 
 	const openURLCommand = vscode.commands.registerCommand("vscode-status.openURL", () => {
-		vscode.env.openExternal(vscode.Uri.parse(`https://vscode.snehasish.xyz/users/${uid}`));
+		vscode.env.openExternal(vscode.Uri.parse(`https://vscode.snehasish.xyz/api/users/${uid}`));
 	});
 
 	context.subscriptions.push(
 		// listener events
 		activeTextEditorChangeListener,
 		textDocumentChangeListener,
+		textDocumentCloseListener,
 		workspaceFolderChangeListener,
 		// commands
 		openURLCommand,

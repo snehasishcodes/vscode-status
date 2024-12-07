@@ -1,12 +1,12 @@
 import * as vscode from "vscode";
 import { StatusType } from "./status";
 import log, { LogLevel } from "./log";
+import throttle from "./throttle";
 
 let lastFetchTime = 0;
 
 export default async function update(uid: string, details?: StatusType) {
-    // 1 request every minute for minimum.
-    if (lastFetchTime === 0 || Math.floor(Date.now() - lastFetchTime) > 60000) {
+    throttle(async () => {
         log(LogLevel.Info, `Updating Status.`);
 
         let body: { uid: string, details?: StatusType } = { uid };
@@ -36,5 +36,6 @@ export default async function update(uid: string, details?: StatusType) {
             console.error(e);
             log(LogLevel.Error, `FETCH_ERROR: ${e}`);
         }
-    }
+    }, 2000);
+    // allow only 1 request every 2 seconds
 }
