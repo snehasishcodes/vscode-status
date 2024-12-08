@@ -24,7 +24,7 @@ router.get("/users/:uid", async (req, res) => {
                     size: current?.file?.size ?? null,
                     lines: current?.file?.lines ?? 0,
                     position: current?.file?.position ?? { line: 0, column: 0 },
-                    errors: current?.file?.errors ?? nul0,
+                    errors: current?.file?.errors ?? null,
                 },
                 workspace: {
                     name: current?.workspace?.name ?? null,
