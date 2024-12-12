@@ -14,7 +14,7 @@ router.get("/users/:uid", async (req, res) => {
 
         const result = {
             uid,
-            current: {
+            current: !current.file || !current.file.name ? null : {
                 started: current?.started ?? null,
                 file: {
                     name: current?.file?.name ?? null,
