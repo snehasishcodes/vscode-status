@@ -12,9 +12,10 @@ router.get("/users/:uid", async (req, res) => {
         const current = data.current;
         const recent = data.recent;
 
-        const result = {
-            uid,
-            current: !current.file || !current.file.name ? null : {
+        let currentData;
+
+        if (current.file && current?.file?.name && typeof current?.file?.name === "string")
+            currentData = {
                 started: current?.started ?? null,
                 file: {
                     name: current?.file?.name ?? null,
@@ -31,7 +32,12 @@ router.get("/users/:uid", async (req, res) => {
                     path: current?.workspace?.path ?? null,
                 },
                 debugging: current?.debugging === true
-            },
+            }
+        else currentData = null;
+
+        const result = {
+            uid,
+            current: currentData,
             recent: recent
         };
 
