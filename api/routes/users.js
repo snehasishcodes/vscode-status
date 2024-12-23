@@ -47,10 +47,10 @@ router.get("/users/:uid", async (req, res) => {
             code: 200
         }).end();
     } else {
-        return res.status(404).json({
-            success: false,
-            message: "UID not found.",
-            code: 404
+        return res.status(200).json({
+            success: true,
+            message: "Start editing a file to show your status.",
+            code: 200
         }).end();
     }
 });
