@@ -25,14 +25,11 @@ async function activate(context: vscode.ExtensionContext) {
 	statusBarItem.command = "vscode-status.openURL";
 	statusBarItem.show();
 
-	// get workspace configurations
-	const config = vscode.workspace.getConfiguration("vscode-status");
-
-	let uid: string | undefined = config.get("uid");
+	let uid: string | undefined = context.globalState.get<string | undefined>("vscode-status-uid");
 	if (!uid) {
 		statusBarItem.text = `$(plug) Creating UID`;
 		uid = createUid();
-		await config.update("uid", uid, vscode.ConfigurationTarget.Global);
+		context.globalState.update("vscode-status-uid", uid);
 		log(LogLevel.Info, "[INFO]: Generated a new UID and stored.");
 	}
 
@@ -49,6 +46,8 @@ async function activate(context: vscode.ExtensionContext) {
 	const textDocumentChangeListener = vscode.workspace.onDidChangeTextDocument(throttle(() => send(uid), 3000));
 	const textDocumentCloseListener = vscode.workspace.onDidCloseTextDocument(() => send(uid));
 	const workspaceFolderChangeListener = vscode.workspace.onDidChangeWorkspaceFolders(() => send(uid));
+	const debuggingStartListener = vscode.debug.onDidStartDebugSession(() => send(uid));
+	const debuggingEndListener = vscode.debug.onDidTerminateDebugSession(() => send(uid));
 
 	const openURLCommand = vscode.commands.registerCommand("vscode-status.openURL", () => {
 		vscode.env.openExternal(vscode.Uri.parse(`https://vscode.snehasish.xyz/api/users/${uid}`));
@@ -60,14 +59,15 @@ async function activate(context: vscode.ExtensionContext) {
 		textDocumentChangeListener,
 		textDocumentCloseListener,
 		workspaceFolderChangeListener,
+		debuggingStartListener,
+		debuggingEndListener,
 		// commands
 		openURLCommand,
 	);
 };
 
-function deactivate() {
-	const config = vscode.workspace.getConfiguration("vscode-status");
-	let uid: string | undefined = config.get("uid");
+function deactivate(context: vscode.ExtensionContext) {
+	let uid: string | undefined = context.globalState.get<string | undefined>("vscode-status-uid");
 
 	if (uid) {
 		update(uid);
