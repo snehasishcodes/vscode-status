@@ -7,7 +7,7 @@
 # How to use:
 
 ### 1. Download the VSCode Status Extension
-from [https://marketplace.visualstudio.com/items?itemName=snehasishcodes.vscode-status](https://marketplace.visualstudio.com/items?itemName=snehasishcodes.vscode-status)
+from https://marketplace.visualstudio.com/items?itemName=snehasishcodes.vscode-status
 
 
 ### 2. Activate the Extension
@@ -18,17 +18,7 @@ it usually auto-activates. On activation, you will find a "Active" plug button o
 ### 3. Click on the "Active" button
 and it will redirect you to your API endpoint. 
 
----
-
-### 4: If it fails,
-go to settings > extension settings > VSCODE STATUS SETTINGS and copy the `Unique ID` from the input
-
-![uid](https://i.imgur.com/FOLxGIo.png)
-
-### 5: Go to `https://vscode.snehasish.xyz/api/users/[your-uid-here]`
-put your UID in the place and you're all done.
-
-example: https://vscode.snehasish.xyz/api/users/snehasish
+example: https://vscode.snehasish.xyz/api/users/103733671734974690853
 
 ---
 
