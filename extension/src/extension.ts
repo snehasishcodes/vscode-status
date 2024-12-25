@@ -18,6 +18,9 @@ const send = async (uid: string) => {
 async function activate(context: vscode.ExtensionContext) {
 	log(LogLevel.Info, "[INFO]: Extension Started.");
 
+	// display (not editable) UID in the extension settings
+	const config = vscode.workspace.getConfiguration("vscode-status");
+
 	// create right aligned status bar (on the bottom)
 	const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 	statusBarItem.tooltip = "VSCode Status. Click to open your API URL.";
@@ -30,6 +33,7 @@ async function activate(context: vscode.ExtensionContext) {
 		statusBarItem.text = `$(plug) Creating UID`;
 		uid = createUid();
 		context.globalState.update("vscode-status-uid", uid);
+		await config.update("uid", uid, vscode.ConfigurationTarget.Global);
 		log(LogLevel.Info, "[INFO]: Generated a new UID and stored.");
 	}
 
@@ -41,6 +45,8 @@ async function activate(context: vscode.ExtensionContext) {
 		}
 	});
 	statusBarItem.text = `$(plug) Active`;
+	// if UID was edited reset it back to original
+	await config.update("uid", uid, vscode.ConfigurationTarget.Global);
 
 	const activeTextEditorChangeListener = vscode.window.onDidChangeActiveTextEditor(() => send(uid));
 	const textDocumentChangeListener = vscode.workspace.onDidChangeTextDocument(throttle(() => send(uid), 3000));

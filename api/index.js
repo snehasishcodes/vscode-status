@@ -24,6 +24,7 @@ if (process.env.NODE_ENV === "production") {
 app.use("/", require("./routes/root"));
 app.use("/api", require("./routes/users"));
 app.use("/api", require("./routes/svg"));
+app.use("/api", require("./routes/png"));
 app.use("/api", require("./routes/update"));
 
 // Status route
