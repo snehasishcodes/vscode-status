@@ -46,8 +46,8 @@ export default function status(): StatusType | undefined {
             const errors = diagnostics.length ?? 0;
 
             const workspace = getWorkspace();
-            const workspaceName = workspace?.name;
-            const workspacePath = workspace?.path;
+            const workspaceName = workspace?.name ?? null;
+            const workspacePath = workspace?.path ?? null;
 
             const debugSession = vscode.debug.activeDebugSession;
             let debugging = false;
@@ -58,21 +58,21 @@ export default function status(): StatusType | undefined {
 
             return {
                 file: {
-                    name,
-                    extension,
-                    path: filePath,
-                    language,
-                    size: fileSize,
-                    lines,
+                    name: name ?? null,
+                    extension: extension ?? null,
+                    path: filePath ?? null,
+                    language: language ?? null,
+                    size: fileSize ?? null,
+                    lines: lines ?? null,
                     position: {
-                        line: position.line + 1,
-                        column: position.character + 1
+                        line: position.line ? position.line + 1 : null,
+                        column: position.character ? position.character + 1 : null
                     },
-                    errors: errors
+                    errors: errors ?? null
                 },
                 workspace: {
-                    name: workspaceName,
-                    path: workspacePath
+                    name: workspaceName ?? null,
+                    path: workspacePath ?? null
                 },
                 debugging
             } as StatusType;

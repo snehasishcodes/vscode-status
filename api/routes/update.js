@@ -33,7 +33,7 @@ router.post("/update", async (req, res) => {
                 ended: `${Date.now()}`,
                 ...data.current
             };
-            data.current = {};
+            data.current = null;
             data.save();
 
             return res.status(200).json({

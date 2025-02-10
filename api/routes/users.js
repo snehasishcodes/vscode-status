@@ -9,30 +9,43 @@ router.get("/users/:uid", async (req, res) => {
     const data = await Data.findOne({ uid: uid });
 
     if (data && data.uid === uid) {
+        const timeNow = Date.now();
         const current = data.current;
         const recent = data.recent;
 
         let currentData;
 
-        if (current.file && current?.file?.name && typeof current?.file?.name === "string")
-            currentData = {
-                started: current?.started ?? null,
-                file: {
-                    name: current?.file?.name ?? null,
-                    extension: current?.file?.extension ?? null,
-                    path: current?.file?.path ?? null,
-                    language: current?.file?.language ?? null,
-                    size: current?.file?.size ?? null,
-                    lines: current?.file?.lines ?? 0,
-                    position: current?.file?.position ?? { line: 0, column: 0 },
-                    errors: current?.file?.errors ?? null,
-                },
-                workspace: {
-                    name: current?.workspace?.name ?? null,
-                    path: current?.workspace?.path ?? null,
-                },
-                debugging: current?.debugging === true
+        if (current.file && current?.file?.name && typeof current?.file?.name === "string") {
+            if (current?.started && ((timeNow - parseInt(current?.started)) < 180_0000)) { // 30 mins
+                currentData = {
+                    started: current?.started ?? null,
+                    file: {
+                        name: current?.file?.name ?? null,
+                        extension: current?.file?.extension ?? null,
+                        path: current?.file?.path ?? null,
+                        language: current?.file?.language ?? null,
+                        size: current?.file?.size ?? null,
+                        lines: current?.file?.lines ?? 0,
+                        position: current?.file?.position ?? { line: 0, column: 0 },
+                        errors: current?.file?.errors ?? null,
+                    },
+                    workspace: {
+                        name: current?.workspace?.name ?? null,
+                        path: current?.workspace?.path ?? null,
+                    },
+                    debugging: current?.debugging === true
+                }
+            } else {
+                data.recent = {
+                    ended: `${Date.now()}`,
+                    ...data.current
+                };
+                data.current = null; // remove data when there's no current activity in the last 30 mins
+                data.save();
+                
+                currentData = null;
             }
+        }
         else currentData = null;
 
         const result = {
