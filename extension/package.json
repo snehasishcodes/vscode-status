@@ -6,30 +6,46 @@
 	"publisher": "snehasishcodes",
 	"author": {
 		"name": "snehasishcodes",
-		"email": "snehasishcodes@gmail.com",
+		"email": "mail@snehasish.xyz",
 		"url": "https://snehasish.xyz"
 	},
 	"repository": {
 		"url": "https://github.com/snehasishcodes/vscode-status"
 	},
-	"version": "1.1.0",
+	"version": "2.0.0",
 	"engines": {
 		"vscode": "^1.95.0"
 	},
 	"categories": [
 		"Other"
 	],
-	"activationEvents": ["*"],
+	"activationEvents": [
+		"onStartupFinished"
+	],
 	"main": "./dist/extension.js",
 	"contributes": {
+		"commands": [
+			{
+				"command": "vscode-status.resetCredentials",
+				"title": "Reset Credentials"
+			}
+		],
 		"configuration": {
 			"type": "object",
 			"title": "VSCode Status Settings",
 			"properties": {
 				"vscode-status.uid": {
 					"type": "string",
+					"title": "User ID",
 					"default": "",
-					"description": "Unique ID",
+					"description": "Shareable public user ID referenced as UID. Randomly generated.",
+					"readOnly": true
+				},
+				"vscode-status.token": {
+					"type": "string",
+					"title": "User Token",
+					"default": "",
+					"description": "DO NOT SHARE THIS: Used as authentication token to update details for your public profile. Sharing this might allow other users to change your public status.",
 					"readOnly": true
 				}
 			}

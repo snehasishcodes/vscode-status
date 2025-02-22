@@ -1,16 +1,15 @@
 {
     "version": 2,
-    "name": "express-api-template",
     "builds": [
         {
-            "src": "./index.js",
+            "src": "src/index.ts",
             "use": "@vercel/node"
         }
     ],
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "/"
+            "dest": "/src/index.ts"
         }
     ]
 }

@@ -1,21 +1,37 @@
 {
-    "name": "express-api-template",
-    "version": "1.0.0",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node index.js"
-    },
-    "keywords": [],
-    "author": "snehasishlol",
-    "license": "ISC",
-    "description": "",
-    "dependencies": {
-        "cors": "^2.8.5",
-        "dotenv": "^16.4.5",
-        "express": "^4.19.2",
-        "mongoose": "^8.4.1",
-        "morgan": "^1.10.0",
-        "sharp": "^0.33.5"
-    }
+	"name": "server",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"dev": "nodemon",
+		"build": "tsc",
+		"start": "node dist/server.js"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "commonjs",
+	"description": "",
+	"dependencies": {
+		"@lacerity/webhook": "^1.0.0",
+		"@types/body-parser": "^1.19.5",
+		"@vercel/node": "^5.1.8",
+		"body-parser": "^1.20.3",
+		"cookie-parser": "^1.4.7",
+		"cors": "^2.8.5",
+		"dotenv": "^16.4.7",
+		"express": "^4.21.2",
+		"mongoose": "^8.9.6",
+		"morgan": "^1.10.0"
+	},
+	"devDependencies": {
+		"@types/cookie-parser": "^1.4.8",
+		"@types/cors": "^2.8.17",
+		"@types/express": "^5.0.0",
+		"@types/morgan": "^1.9.9",
+		"@types/node": "^22.12.0",
+		"nodemon": "^3.1.9",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.7.3"
+	}
 }
