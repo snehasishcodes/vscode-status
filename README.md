@@ -75,7 +75,7 @@ https://vscode.snehasish.xyz/api/users/:YOUR_UID
 
 ### API Base URL
 ```
-https://vscode.snehasish.xyz/api/
+https://vscode.snehasish.xyz/api/v1/
 ```
 
 ### API Endpoints
@@ -97,7 +97,7 @@ GET /users/417612111734978277950
 {
     "success": true,
     "data": {
-        "uid": "417612111734978277950",
+        "id": "417612111734978277950",
         "current": {
             "started": "1735137118372",
             "file": {
@@ -146,7 +146,7 @@ GET /users/417612111734978277950
 }
 ```
 
-#### Get User SVG
+#### Get User SVG 
 
 Returns the specified user's information in SVG with customizable lines and fields. For example: to directly embed it as image or iframe into your website.
 
@@ -210,6 +210,5 @@ Self hosting guide will be coming soon! Join our [Discord](#support) for future 
 ## Sponsor
 
 Well, I'm just a high school student creating stuff part-time but anyways. You can sponsor me (or this proj) here:
-
-#### [Buy Me a Coffee](https://buymeacoffee.com/snehasish)
-#### UPI: `snehasishcodes@oksbi`
+- [Buy Me a Coffee](https://buymeacoffee.com/snehasish)
+- UPI: `snehasishcodes@oksbi`
