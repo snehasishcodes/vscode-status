@@ -1,10 +1,3 @@
-# Node.js - Express.js REST API with Typescript
-
-## Load Template with [`template-use`](https://github.com/template-use/template-use)
-```bash
-npx template-use express-ts-mongoose
-```
-
 ## Installation
 ```bash
 npm install
