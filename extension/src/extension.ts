@@ -1,62 +1,97 @@
 import * as vscode from "vscode";
 import status from "./status";
 import update from "./update";
-import createUid from "./uid";
+import credentials from "./credentials";
 import log, { LogLevel } from "./log";
 import throttle from "./throttle";
 
+const extensionID = "vscode-status";
+
 // send status
-const send = async (uid: string) => {
+const send = async (uid: string, token: string) => {
 	// get editor details
 	const details = status();
 	if (details) {
 		// initial update after loading vscode
-		update(uid, details);
+		update(uid, token, details);
 	}
 };
 
 async function activate(context: vscode.ExtensionContext) {
 	log(LogLevel.Info, "[INFO]: Extension Started.");
 
-	// display (not editable) UID in the extension settings
-	const config = vscode.workspace.getConfiguration("vscode-status");
+	// display UID in the extension settings
+	const config = vscode.workspace.getConfiguration(extensionID);
 
 	// create right aligned status bar (on the bottom)
 	const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 	statusBarItem.tooltip = "VSCode Status. Click to open your API URL.";
 	statusBarItem.text = "$(plug) Initialising";
-	statusBarItem.command = "vscode-status.openURL";
+	statusBarItem.command = `${extensionID}.openURL`;
 	statusBarItem.show();
 
-	let uid: string | undefined = context.globalState.get<string | undefined>("vscode-status-uid");
-	if (!uid) {
-		statusBarItem.text = `$(plug) Creating UID`;
-		uid = createUid();
-		context.globalState.update("vscode-status-uid", uid);
-		await config.update("uid", uid, vscode.ConfigurationTarget.Global);
-		log(LogLevel.Info, "[INFO]: Generated a new UID and stored.");
+	let uid = context.globalState.get<string | undefined>(`${extensionID}.uid`);
+	let token = context.globalState.get<string | undefined>(`${extensionID}.token`);
+
+	if (!uid || !token) {
+		statusBarItem.text = `$(plug) Authenticating`;
+
+		const creds = await credentials();
+		uid = creds.id;
+		token = creds.token;
+
+		context.globalState.update(`${extensionID}.uid`, uid);
+		context.globalState.update(`${extensionID}.token`, token);
+
+		config.update("uid", uid, vscode.ConfigurationTarget.Global);
+		config.update("token", token, vscode.ConfigurationTarget.Global);
+		log(LogLevel.Info, "[INFO]: Generated new credentials and stored in extension settings.");
 	}
 
 	// start updating the status
-	await send(uid);
-	vscode.window.showInformationMessage("VSCode Status: Active", "Open API Endpoint").then((selectedButton) => {
+	send(uid!, token!);
+
+	// show message once extension activates
+	vscode.window.showInformationMessage("VSCode Status: Active", "Open API Endpoint", "GitHub").then((selectedButton) => {
 		if (selectedButton === "Open API Endpoint") {
 			vscode.env.openExternal(vscode.Uri.parse(`https://vscode.snehasish.xyz/api/users/${uid}`));
 		}
+
+		if (selectedButton === "GitHub") {
+			vscode.env.openExternal(vscode.Uri.parse(`https://github.com/snehasishcodes/vscode-status`));
+		}
 	});
-	statusBarItem.text = `$(plug) Active`;
-	// if UID was edited reset it back to original
-	await config.update("uid", uid, vscode.ConfigurationTarget.Global);
 
-	const activeTextEditorChangeListener = vscode.window.onDidChangeActiveTextEditor(() => send(uid));
-	const textDocumentChangeListener = vscode.workspace.onDidChangeTextDocument(throttle(() => send(uid), 3000));
-	const textDocumentCloseListener = vscode.workspace.onDidCloseTextDocument(() => send(uid));
-	const workspaceFolderChangeListener = vscode.workspace.onDidChangeWorkspaceFolders(() => send(uid));
-	const debuggingStartListener = vscode.debug.onDidStartDebugSession(() => send(uid));
-	const debuggingEndListener = vscode.debug.onDidTerminateDebugSession(() => send(uid));
+	statusBarItem.text = `$(plug) VSCode Status`;
 
-	const openURLCommand = vscode.commands.registerCommand("vscode-status.openURL", () => {
+	// if UID or token was edited reset it back to original
+	config.update("uid", uid, vscode.ConfigurationTarget.Global);
+	config.update("token", token, vscode.ConfigurationTarget.Global);
+
+	const activeTextEditorChangeListener = vscode.window.onDidChangeActiveTextEditor(() => send(uid!, token!));
+	const textDocumentChangeListener = vscode.workspace.onDidChangeTextDocument(throttle(() => send(uid!, token!), 3000));
+	const textDocumentCloseListener = vscode.workspace.onDidCloseTextDocument(() => send(uid!, token!));
+	const workspaceFolderChangeListener = vscode.workspace.onDidChangeWorkspaceFolders(() => send(uid!, token!));
+	const debuggingStartListener = vscode.debug.onDidStartDebugSession(() => send(uid!, token!));
+	const debuggingEndListener = vscode.debug.onDidTerminateDebugSession(() => send(uid!, token!));
+
+	const openURLCommand = vscode.commands.registerCommand(`${extensionID}.openURL`, () => {
 		vscode.env.openExternal(vscode.Uri.parse(`https://vscode.snehasish.xyz/api/users/${uid}`));
+	});
+
+	const resetCredentialsCommand = vscode.commands.registerCommand(`${extensionID}.openCustomSettings`, async () => {
+		const creds = await credentials();
+
+		uid = creds.id;
+		token = creds.token;
+
+		context.globalState.update(`${extensionID}.uid`, uid);
+		context.globalState.update(`${extensionID}.token`, token);
+
+		config.update("uid", uid, vscode.ConfigurationTarget.Global);
+		config.update("token", token, vscode.ConfigurationTarget.Global);
+
+		vscode.window.showInformationMessage("Reset VSCode Status Credentials");
 	});
 
 	context.subscriptions.push(
@@ -69,14 +104,16 @@ async function activate(context: vscode.ExtensionContext) {
 		debuggingEndListener,
 		// commands
 		openURLCommand,
+		resetCredentialsCommand
 	);
 };
 
 function deactivate(context: vscode.ExtensionContext) {
-	let uid: string | undefined = context.globalState.get<string | undefined>("vscode-status-uid");
+	let uid = context.globalState.get<string | undefined>(`${extensionID}.uid`);
+	let token = context.globalState.get<string | undefined>(`${extensionID}.token`);
 
-	if (uid) {
-		update(uid);
+	if (uid && token) {
+		update(uid, token);
 	}
 };
 

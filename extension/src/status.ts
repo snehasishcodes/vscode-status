@@ -63,12 +63,12 @@ export default function status(): StatusType | undefined {
                     path: filePath ?? null,
                     language: language ?? null,
                     size: fileSize ?? null,
-                    lines: lines ?? null,
+                    lines: lines ?? 0,
                     position: {
-                        line: position.line ? position.line + 1 : null,
-                        column: position.character ? position.character + 1 : null
+                        line: position.line ? position.line + 1 : 0,
+                        column: position.character ? position.character + 1 : 0
                     },
-                    errors: errors ?? null
+                    errors: errors ?? 0
                 },
                 workspace: {
                     name: workspaceName ?? null,
