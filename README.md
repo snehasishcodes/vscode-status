@@ -4,9 +4,9 @@
 
 A Visual Studio Code **extension** that makes it easy for you to export and display your current (and recent) workspace and file details. No authentication required, just simply download the extension and you're all set. See exported workspace and file details [here]().
 
-For example: I use it to display my current activity on my [personal website](https://snehasish.xyz)
+For example: I use it to display my current activity on my [github profile](https://github.com/snehasishcodes/)
 
-<img src="https://i.imgur.com/t5S6Gko.png" alt="VSCode Status on my personal website" height="160" />
+<img src="https://i.imgur.com/I01rcY8.png" alt="VSCode Status on my github profile" style="width:fit;height:fit;max-height:250px;" />
 
 ---
 
@@ -16,7 +16,7 @@ You can download the **VSCode Status** extension by [snehasishcodes](https://sne
 
 ### [Download the Extension](https://vscode.snehasish.xyz)
 
-<img src="https://i.imgur.com/M4bofdt.png" alt="Extension preview" height="200" />
+<img src="https://i.imgur.com/M4bofdt.png" alt="Extension preview" style="width:fit;height:fit;max-height:250px;" />
 
 ## Table of Contents
 
@@ -41,11 +41,11 @@ You can download the **VSCode Status** extension by [snehasishcodes](https://sne
 The extension activates automatically once you download it (usual behaviour) and everytime you open VSCode. \
 Once the extension starts it should give you the following notification.
 
-<img src="https://i.imgur.com/lCu8utW.png" alt="Extension activation notification" height="200" />
+<img src="https://i.imgur.com/lCu8utW.png" alt="Extension activation notification" style="width:fit;height:fit;max-height:125px;" />
 
 And you should be able to see the following button on your VSCode Status Bar.
 
-<img src="https://i.imgur.com/E8im5ht.png" alt="Extension status bar button preview" height="75" />
+<img src="https://i.imgur.com/E8im5ht.png" alt="Extension status bar button preview" style="width:fit;height:fit;max-height:75px;" />
 
 If it didn't behave as usual, please reach us at [support](#support).
 
@@ -56,8 +56,8 @@ If it didn't behave as usual, please reach us at [support](#support).
 You can click on either of the "Open API Endpoint" button on the extension's activation notification or the "Active" button on the Status bar. \
 This will open your API Endpoint URL in the browser.
 
-<img src="https://i.imgur.com/lCu8utW.png" alt="Extension activation notification" height="75" />
-<img src="https://i.imgur.com/E8im5ht.png" alt="Extension status bar button preview" height="75" />
+<img src="https://i.imgur.com/lCu8utW.png" alt="Extension activation notification" style="width:fit;height:fit;max-height:125px;" />
+<img src="https://i.imgur.com/E8im5ht.png" alt="Extension status bar button preview" style="width:fit;height:fit;max-height:75px;" />
 
 **OR**
 
@@ -90,59 +90,56 @@ Returns current and most recent activity of user with the specified UID.
 **Example Response**
 
 ```
-GET /users/417612111734978277950
+GET /users/17402284804991245448
 ```
 
 ```json
 {
-    "success": true,
-    "data": {
-        "id": "417612111734978277950",
-        "current": {
-            "started": "1735137118372",
-            "file": {
-                "name": "README",
-                "extension": "md",
-                "path": "e:\\projects\\vscode-status\\README.md",
-                "language": "markdown",
-                "size": "3.00 KB",
-                "lines": 91,
-                "position": {
-                    "line": 91,
-                    "column": 1
-                },
-                "errors": 0
+    "id": "17402284804991245448",
+    "current": {
+        "started": "2025-02-22T12:49:31.461Z",
+        "file": {
+            "name": "README",
+            "extension": "md",
+            "path": "e:\\projects\\vscode-status\\README.md",
+            "language": "markdown",
+            "size": "7.51 KB",
+            "lines": 214,
+            "position": {
+                "line": 0,
+                "column": 0
             },
-            "workspace": {
-                "name": "vscode-status",
-                "path": "e:\\projects\\vscode-status"
-            },
-            "debugging": false
+            "errors": 0
         },
-        "recent": {
-            "ended": "1735139973573",
-            "started": "1735137118372",
-            "file": {
-                "name": "README",
-                "extension": "md",
-                "path": "e:\\projects\\vscode-status\\README.md",
-                "language": "markdown",
-                "size": "2.98 KB",
-                "lines": 89,
-                "position": {
-                    "line": 89,
-                    "column": 18
-                },
-                "errors": 0
-            },
-            "workspace": {
-                "name": "vscode-status",
-                "path": "e:\\projects\\vscode-status"
-            },
-            "debugging": false
-        }
+        "workspace": {
+            "name": "vscode-status",
+            "path": "e:\\projects\\vscode-status"
+        },
+        "debugging": false
     },
-    "code": 200
+    "recent": {
+        "started": "2025-02-22T12:49:31.461Z",
+        "file": {
+            "name": "README",
+            "extension": "md",
+            "path": "e:\\projects\\vscode-status\\README.md",
+            "language": "markdown",
+            "size": "7.52 KB",
+            "lines": 214,
+            "position": {
+                "line": 48,
+                "column": 130
+            },
+            "errors": 0
+        },
+        "workspace": {
+            "name": "vscode-status",
+            "path": "e:\\projects\\vscode-status"
+        },
+        "debugging": false
+    },
+    "updated": "2025-02-22T12:48:00.499Z",
+    "created": "2025-02-22T12:48:00.499Z"
 }
 ```
 
@@ -182,7 +179,7 @@ All of the above params are optional.
 **Example Response**
 
 ```
-GET /users/417612111734978277950/svg?line1={file}+|+{size}&line3=on+{workspaceName}&line4=for+{elapsedTime}
+GET /users/17402284804991245448/svg?line1={file}+|+{size}&line3=on+{workspaceName}&line4=for+{elapsedTime}
 ```
 
 <img src="https://i.imgur.com/mLGz2gf.png" alt="Get User SVG Example" height="300" />

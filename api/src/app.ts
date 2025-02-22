@@ -11,6 +11,7 @@ if (process.env.NODE_ENV !== "production") {
 
 import base from "./routes/base";
 import v1 from "./routes/v1";
+import redirects from "./routes/redirects";
 import connectMongoDB from "./database/connect";
 
 const app = express();
@@ -28,6 +29,7 @@ app.set("json spaces", 4);
 // Routes - with version
 app.use("/api", base);
 app.use("/api/v1", v1);
+app.use("/", redirects);
 
 // 404 Handler
 app.use((req, res) => {
