@@ -9,6 +9,7 @@ if (process.env.NODE_ENV !== "production") {
     dotenv.config();
 }
 
+import base from "./routes/base";
 import v1 from "./routes/v1";
 import connectMongoDB from "./database/connect";
 
@@ -22,8 +23,10 @@ app.use(cookieParser()); // Parse cookies
 app.use(bodyParser.json()); // Parse JSON bodies
 app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
 app.use(cors()); // Enable CORS
+app.set("json spaces", 4);
 
 // Routes - with version
+app.use("/api", base);
 app.use("/api/v1", v1);
 
 // 404 Handler

@@ -75,7 +75,7 @@ https://vscode.snehasish.xyz/api/users/:YOUR_UID
 
 ### API Base URL
 ```
-https://vscode.snehasish.xyz/api/v1/
+https://vscode.snehasish.xyz/api/
 ```
 
 ### API Endpoints
