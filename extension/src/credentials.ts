@@ -10,10 +10,11 @@ export default async function credentials() {
     });
 
     if (!res.ok) {
-        log(LogLevel.Error, "[vscs]: Could not generate credentials.");
+        log(LogLevel.Error, "Could not generate credentials.");
     }
 
     const data = await res.json();
+    console.log(data);
 
     return data as { id: string, token: string };
 }
